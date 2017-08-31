@@ -10,13 +10,13 @@ import const, const_values
 __all__ = ["log_debug", "log_info", "log_warnning", "log_error", "log_critical"]
 
 # 基本配置
-logging.basicConfig(level=logging.DEBUG,
+logging.basicConfig(level=const.log_file_level,
                     format='%(asctime)s %(filename)s-line:%(lineno)d [%(levelname)s] : %(message)s',
                     datefmt='%Y-%m-%d %A %H:%M:%S',
                     filename=const.log_file_name,
                     filemode='a')
 console = logging.StreamHandler()
-console.setLevel(const.log_level_console)
+console.setLevel(const.log_console_level)
 formatter = logging.Formatter('%(asctime)s %(filename)s-line:%(lineno)d [%(levelname)s] : %(message)s')
 console.setFormatter(formatter)
 my_logger = logging.getLogger('')
@@ -79,13 +79,3 @@ def log_critical(msg, *args, **kwargs):
     my_logger.critical(msg, *args, **kwargs)
 
 
-def main():
-    log_debug("debug")
-    log_info("info")
-    log_warnning("warnning")
-    log_error("error")
-    log_critical("critical")
-
-
-if __name__ == "__main__":
-    main()

@@ -5,11 +5,9 @@ mysql的读取接口，注意使用SQLWrapper来操作
 from __future__ import division
 
 import MySQLdb as mysql
-
 import configs
 import strings
-from check import check_func
-from logs import log_info,log_error
+from logs import log_info
 
 __all__ = ["SqlWrapper"]
 
@@ -33,7 +31,7 @@ class SqlWrapper(object):
 
 
 class Sql(object):
-    __slots__ = ['__connect0', '__is_login', '__filepath', '__filename', '__database', "__is_normal"]
+    __slots__ = [ '__is_login', '__filepath', '__filename', '__database', "__is_normal"]
     __connect0 = ""
 
     def __init__(self, **kwargs):
@@ -78,7 +76,6 @@ class Sql(object):
         """
         cur = self.__connect0.cursor()
         if cur:
-            # print sql
             if not data:
                 cur.execute(sql)
             else:
@@ -97,9 +94,7 @@ class Sql(object):
         """
         cur = self.__connect0.cursor()
         if cur:
-            print sql
             cur.execute(sql)
-
             if mode == "_MANY" and len > 0:
                 data_list = cur.fetchmany(size=size)
             elif mode == "_ONE" and len == -1:
@@ -124,11 +119,10 @@ class SqlHelper(Sql):
         :return: True if the sql execute successfully or False
         """
         if data_list and len(col_list) != len(data_list[0]):
-            # print len(col_list),len(data_list)
-            raise Exception(u"Column list size not equals data list size:col_list {0} ,data_list {1}".format(len(col_list,len(data_list[0]))))
+            raise Exception(u"Size not match:col_list {0} ,data_list {1}".format(len(col_list), len(data_list[0])))
         data_list = [tuple(data) for data in data_list]
         sql = "insert into " + table + "(" + ",".join(col_list) + ") values(" + ",".join(["%s"] * len(col_list)) + ")"
-        log_info("SqlHelper run insert statement: {0}".format(sql))
+        log_info("SqlHelper run insert statement: {0},{1}".format(sql, ",".join(data_list[0])))
         return super(SqlHelper, self).execute_sql(sql, data_list)
 
     def delete(self, table, where=None):
@@ -141,11 +135,10 @@ class SqlHelper(Sql):
         sql = "delete from " + table
         if where:
             sql += " where " + where
-        log_info()
+        log_info("SqlHelper run delete statement: {}".format(sql))
         return super(SqlHelper, self).execute_sql(sql)
 
-    @check_func(__file__, "SqlHelper")
-    def update_one_col(self, table, col, value, where=None):
+    def update_one(self, table, col, value, where=None):
         """
         update the data table with given value on a col
         :param table: the data table
@@ -158,10 +151,10 @@ class SqlHelper(Sql):
         sql = "update " + table + " set " + col + " = " + my_value + ""
         if where:
             sql += " where " + where
+        log_info("SqlHelper run update statement: {}".format(sql))
         return super(SqlHelper, self).execute_sql(sql)
 
-    @check_func(__file__, "SqlHelper")
-    def update_many_cols(self, table, col_list, data_list, where=None):
+    def update_many(self, table, col_list, data_list, where=None):
         """
         update data on many columns
         :param table: the data table
@@ -172,14 +165,14 @@ class SqlHelper(Sql):
         """
         sql = "update " + table + " set "
         if len(col_list) != len(data_list):
-            raise Exception(u"Column list size not equals data list size:c ol_list size--%d ,data_list size--%d" %
-                            len(col_list), len(data_list))
+            raise Exception(u"Size not match: col_list size--%d ,data_list size--%d" %len(col_list), len(data_list))
         pairs = []
         for i in range(0, len(col_list)):
             pairs.append(col_list[i] + " = " + strings.transfer_sql_text(data_list[i]))
         sql += " , ".join(pairs)
         if where:
             sql += " where " + where
+        log_info("SqlHelper run update_many statement: {}".format(sql))
         return super(SqlHelper, self).execute_sql(sql)
 
     def select_many(self, table, col=None, where=None, order_by=None, group_by=None):
@@ -209,24 +202,6 @@ class SqlHelper(Sql):
     def select_one(self, table, col=None, where=None, order_by=None, group_by=None):
         if not col or (col.upper().find("CONCAT") == -1 and col.find(",") > -1):
             raise Exception("Input Column name INVALID: %s!" % col)
-        log_info("SqlHelper run select statement:{}".format(sql))
         temp = self.select_many(table=table, col=col, where=where, order_by=order_by, group_by=group_by)
         result = [x[0] for x in temp]
         return result
-
-
-def main():
-    print("hello,world")
-    with SqlWrapper(filename="../res/profiles/mysql.ini", section="mysql_server") as sql_helper:
-        # sql_helper.insert(table="role", col_list=["role_name", "role_desc"],
-        #                   data_list=[[u"我们", u"不知道"], [u"我们w2", u"不知道q"]])
-        print(sql_helper.select_one(table="role", col="id", where="id>20", order_by="id desc"))
-        # print sql_helper.select_many(table="role", where="id>20", order_by="id desc")
-        # print sql_helper.update_many_cols(table="role", col_list=["role_name", "role_desc"], data_list=["1", "2"],
-        #                                   where="id>26")
-        # print sql_helper.update_one_col(table="role", col="role_name", value="33", where="id>26")
-        # print sql_helper.delete(table="role",where="id>=21")
-
-
-if __name__ == "__main__":
-    main()

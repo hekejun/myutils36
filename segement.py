@@ -6,11 +6,10 @@ Author: Kejun.He
 """
 from __future__ import division, absolute_import
 import jieba
-from myutils import const, check
+import const
 import jieba.posseg as pseg
 
 
-@check.check_func(__file__)
 def min_cut(str1, dict1=None):
     if dict1:
         jieba.load_userdict(dict1)
@@ -41,7 +40,6 @@ def min_cut(str1, dict1=None):
     return _result
 
 
-@check.check_func(__file__)
 def min_cut_flag(str1, dict1=None):
     _result = []
     _temp = min_cut(str1, dict1=dict1)
@@ -54,14 +52,12 @@ def min_cut_flag(str1, dict1=None):
     return _result
 
 
-@check.check_func(__file__)
 def max_cut(str1,dict1=None):
     if dict1:
         jieba.load_userdict(dict1)
     return jieba.lcut(str1)
 
 
-@check.check_func(__file__)
 def max_cut_flag(str1, dict1=None):
     if dict1:
         jieba.load_userdict(dict1)
@@ -73,7 +69,6 @@ def max_cut_flag(str1, dict1=None):
     return _result
 
 
-@check.check_func(__file__)
 def get_word_flag(str1, dict1=None):
     if dict1:
         jieba.load_userdict(dict1)

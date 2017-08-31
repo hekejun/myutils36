@@ -2,26 +2,18 @@
 """
 项目使用的常量定义表
 """
-import logging
-import os
 
 import const
+import logging
+import sys
 
-"""
-定义所需要的全部常量配置
-"""
-const.test_value=1
-
+# ===========enviroment values start=============#
 # 定义console的logging的报错级别
-const.log_level_console = logging.INFO
-const.log_level_file = logging.INFO
-const.log_file_name="run.log"
+const.log_console_level = logging.INFO
+const.log_file_level = logging.DEBUG
+const.log_file_name = "run.log"
 
+# 判断当前运行的python版本
+const.env_py3 = True if sys.version_info.major == 3 else False
 
-def main():
-    print(const.test_value)
-
-
-if __name__ == "__main__":
-    main()
-
+# ===========enviroment values end=============#

@@ -37,40 +37,16 @@ class Singleton(object):
 
 # noinspection PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences
 def main():
-    # c = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
-    # d = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
-    # j = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
-    # args_dict={"instance":"mysql","filename":"../res/profiles/mysql.ini","section":"mysql_server"}
-    # h=Singleton().instance(**args_dict)
-    # m=Singleton.instance(**const.test_mongo_paras)
-    # assert c is d
-    # assert j is c
-    # assert h is d
-    # assert m is c
-    # print c.select_one(table="role",col="count(*)")
-    # print m.select_one(table="role",col="id")
-    # print d.select_one(table="book",col="count(*)",where="get!=1")
-    # print j.select_one(table="book",col="count(*)",where="get=1")
-    # c.close()
-    # d.close()
-
-    e = Singleton().instance(instance="mongo", filename=const.project_main_path + "/res/profiles/mongo.ini",
-                             section="test_mongo")
-    f = Singleton().instance(instance="mongo", filename=const.project_main_path + "/res/profiles/mongo.ini",
-                             section="test_mongo")
-    g = Singleton().instance(instance="mongo", filename=const.project_main_path + "/res/profiles/mongo.ini",
-                             section="test_mongo")
-    h = Singleton().instance(instance="mongo", filename=const.project_main_path + "/res/profiles/mongo.ini",
-                             section="test_mongo")
-    print (e is f)
-    print (e is g)
-    print (e is h)
-    print e.get_collection_names()
-    print f.get_collection_names()
-    print g.get_collection_names()
-    print h.get_collection_names()
-    e.close()
-    f.close()
+    c = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
+    d = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
+    j = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
+    args_dict={"instance":"mysql","filename":"../res/profiles/mysql.ini","section":"mysql_server"}
+    h=Singleton().instance(**args_dict)
+    m=Singleton.instance(**const.test_mongo_paras)
+    assert c is d
+    assert j is c
+    assert h is d
+    assert m is c
 
 
 if __name__ == "__main__":

@@ -1,33 +1,34 @@
 # -*- coding: UTF-8 -*-
 """
-File: email.py
+File: emails.py
 邮件的接口
 """
 from __future__ import division
 
 import smtplib
-from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
+from email.header import Header
 import configs
-from check import check_func
 
 
 # code here
 class Email(object):
-    @check_func(__file__, "Email")
-    def __init__(self, file_name, section):
+    def __init__(self, **kwargs):
         self.para_dict = {}
-        with configs.ConfigWrapper(file_name, "read") as config1:
-            sections = config1.get_sections()
-            if section not in sections:
-                raise Exception("Section not found: %s" % section)
-            self.para_dict = config1.get_option_dict(section)
+        if "filename" in kwargs:
+            with configs.ConfigWrapper(kwargs.get("filename"), "read") as config:
+                sections = config.get_sections()
+                if kwargs.get("section") not in sections:
+                    raise Exception("Section not found: %s" % kwargs.get("section"))
+            self.para_dict = config.get_option_dict(kwargs.get("section"))
+        else:
+            self.para_dict = kwargs
         para_key = self.para_dict.keys()
         if not {"host", "user", "password"}.issubset(set(para_key)):
             raise Exception("Need [host, user, password, server], found: %s" % str(para_key))
 
-    @check_func(__file__, "Email")
     def send_email(self, to_list, subject, content, file_dict=None, isHtml=False):
         """
         将输入的信息进行构建，转化为email的messgae
@@ -47,8 +48,8 @@ class Email(object):
             msg = MIMEMultipart()
         msg["Accept-Language"] = "zh-CN"
         msg["Accept-Charset"] = "ISO-8859-1,utf-8"
-        if not isinstance(subject, unicode):
-            subject = unicode(subject)
+        # if not isinstance(subject, unicode):
+        #     subject = unicode(subject)
         msg['Subject'] = subject
         msg['From'] = self.para_dict["user"] + "@" + self.para_dict["host"]
         msg['To'] = ";".join(to_list)
@@ -63,7 +64,6 @@ class Email(object):
                 msg.attach(attach)
         return self.send_action(to_list, msg)
 
-    @check_func(__file__, "Email")
     def send_action(self, to_list, msg):
         """
         发送邮件操作
@@ -85,13 +85,3 @@ class Email(object):
             if server and is_connect:
                 server.quit()
             del server
-
-
-def main():
-    EM = Email(file_name="../res/profiles/email.ini", section="UP-email")
-    print EM.send_email(['hekejun@unionpay.com'], "测试邮箱设置", "这是测试邮件")
-    # print EM.send_mail(['hekejun@unionpay.com'], "测试邮箱设置", "<a href='http://www.baidu.com'>百度</a>",isHtml=True)
-
-
-if __name__ == "__main__":
-    main()

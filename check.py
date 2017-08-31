@@ -9,16 +9,20 @@ import platform
 import re
 import sys
 import traceback
-import types
-import time
 from datetime import datetime
 import logs
 
 # code here
-__all__ = ["check_func"]
+__all__ = ["check_func", "cal_run_time"]
 
 
 def cal_run_time(func):
+    """
+    计算函数的运行时间
+    :param func:装饰函数名
+    :return:返回函数运行结果
+    """
+
     def _cal(*args, **kwargs):
         time3 = datetime.utcnow()
         result = func(*args, **kwargs)
@@ -30,16 +34,16 @@ def cal_run_time(func):
             if paras:
                 paras += "--"
             paras += ", ".join([str(x) for x in kwargs.values()])
-        logs.log_info("Run %s<%s> costs time: %d ms" % (
-        func.__name__, paras, (time4 - time3).seconds * 1000 + (time4 - time3).microseconds / 1000))
+        logs.log_info("Function <%s> costs time: %d ms" % (
+            func.__name__, (time4 - time3).seconds * 1000 + (time4 - time3).microseconds / 1000))
         return result
-
     return _cal
 
 
-def check_func(file_name, class_name=None):
+def check_func(file_name=None):
     """
         方法检查的装饰器
+        获得
     """
 
     def _check(func):
@@ -48,16 +52,15 @@ def check_func(file_name, class_name=None):
                 return func(*args, **kwargs)
             except:
                 exc_type, exc_value, exc_tb = sys.exc_info()
-                line_num = get_line_num(traceback.format_exc())
-                line_str = ""
-                if line_num > 0:
-                    line_str = " line %d," % line_num
-                if class_name:
-                    error_msg = "BOOM!!! In File '%s',%s class[%s] - function<%s>" % (
-                        str(file_name), line_str, str(class_name), func.__name__,)
-                else:
-                    error_msg = "BOOM!!! In File '%s',%s function <%s>" % (
+                if file_name:
+                    line_num = get_line_num(traceback.format_exc())
+                    line_str = ""
+                    if line_num > 0:
+                        line_str = " line %d," % line_num
+                    error_msg = "BOOM!!! In File '%s' %s - function<%s>" % (
                         str(file_name), line_str, func.__name__,)
+                else:
+                    error_msg = "BOOM!!! In function <%s>" % (func.__name__,)
                 logs.log_error(error_msg)
                 # 输出错误详情
                 logs.log_error("Error details-- %s, %s" % (exc_type.__name__, exc_value))
@@ -78,17 +81,6 @@ def check_func(file_name, class_name=None):
     return _check
 
 
-def get_line_no(exc_tb):
-    line_num = 0
-    if exc_tb and isinstance(exc_tb, types.TracebackType):
-        while exc_tb:
-            if str(exc_tb.tb_frame.f_locals).find(".py") > -1:
-                line_num = exc_tb.tb_lineno
-            print(line_num, exc_tb.tb_frame.f_locals)
-            exc_tb = exc_tb.tb_next
-    return line_num
-
-
 def get_line_num(exc_msg):
     """
     从报错信息中提取错误行号
@@ -106,19 +98,3 @@ def get_line_num(exc_msg):
             if groups[0].find(" ") > -1:
                 line_num = int(groups[0].split(" ")[1])
     return line_num
-
-@cal_run_time
-def run_1():
-    for x in range(0,3):
-        print(x)
-        time.sleep(1)
-
-@check_func(__file__)
-def run_2():
-    raise  Exception("my exception")
-
-def main():
-    run_1()
-
-if __name__ == "__main__":
-    main()
