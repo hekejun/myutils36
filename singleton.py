@@ -34,20 +34,3 @@ class Singleton(object):
                     return None
         return cls.__singleton_instance[kwargs.get("instance")]
 
-
-# noinspection PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences
-def main():
-    c = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
-    d = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
-    j = Singleton().instance(instance="mysql",filename= "../res/profiles/mysql.ini", section="mysql_server")
-    args_dict={"instance":"mysql","filename":"../res/profiles/mysql.ini","section":"mysql_server"}
-    h=Singleton().instance(**args_dict)
-    m=Singleton.instance(**const.test_mongo_paras)
-    assert c is d
-    assert j is c
-    assert h is d
-    assert m is c
-
-
-if __name__ == "__main__":
-    main()

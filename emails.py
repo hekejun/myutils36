@@ -16,16 +16,16 @@ import configs
 # code here
 class Email(object):
     def __init__(self, **kwargs):
-        self.para_dict = {}
+        self.paras = {}
         if "filename" in kwargs:
             with configs.ConfigWrapper(kwargs.get("filename"), "read") as config:
                 sections = config.get_sections()
                 if kwargs.get("section") not in sections:
                     raise Exception("Section not found: %s" % kwargs.get("section"))
-            self.para_dict = config.get_option_dict(kwargs.get("section"))
+            self.paras = config.get_option_dict(kwargs.get("section"))
         else:
-            self.para_dict = kwargs
-        para_key = self.para_dict.keys()
+            self.paras = kwargs
+        para_key = self.paras.keys()
         if not {"host", "user", "password"}.issubset(set(para_key)):
             raise Exception("Need [host, user, password, server], found: %s" % str(para_key))
 
@@ -51,7 +51,7 @@ class Email(object):
         # if not isinstance(subject, unicode):
         #     subject = unicode(subject)
         msg['Subject'] = subject
-        msg['From'] = self.para_dict["user"] + "@" + self.para_dict["host"]
+        msg['From'] = self.paras["user"] + "@" + self.paras["host"]
         msg['To'] = ";".join(to_list)
         if file_dict:
             body = MIMEText(content, _subtype=type, _charset="utf-8")
@@ -74,10 +74,10 @@ class Email(object):
         server, is_connect = "", False
         try:
             server = smtplib.SMTP()
-            server.connect(self.para_dict["server"])
-            server.login(self.para_dict["user"], self.para_dict["password"])
+            server.connect(self.paras["server"])
+            server.login(self.paras["user"], self.paras["password"])
             is_connect = True
-            server.sendmail(self.para_dict["user"] + "@" + self.para_dict["host"], to_list, msg.as_string())
+            server.sendmail(self.paras["user"] + "@" + self.paras["host"], to_list, msg.as_string())
             return True
         except Exception as e:
             raise Exception("Send email action fail--" + str(e))

@@ -10,7 +10,6 @@ import xlrd
 import xlwt
 
 import files
-from check import check_func
 
 __all__ = ["ExcelWrapper"]
 
@@ -37,8 +36,6 @@ class FullExcel(object):
     """
     基于win32com的Excel操作接口，特点是：打开速度较慢，但是功能丰富，可以做各种单元格操作，格式操作
     """
-
-    @check_func(__file__, "FullExcel")
     def __init__(self, file_name, mode, sheet_name):
         self.excel = win32com.client.DispatchEx('Excel.Application')
         self.excel.visible = False
@@ -59,7 +56,6 @@ class FullExcel(object):
         else:
             pass
 
-    @check_func(__file__, "FullExcel")
     def add_sheet(self, sheet_name):
         """
         根据sheet名新增一个sheet
@@ -70,7 +66,6 @@ class FullExcel(object):
         self.book.Worksheets(1).Name = sheet_name
         return True
 
-    @check_func(__file__, "FullExcel")
     def del_sheet(self, sheet_name):
         """
         根据sheet名删除excel
@@ -85,7 +80,6 @@ class FullExcel(object):
         self.excel.DisplayAlerts = True
         return True
 
-    @check_func(__file__, "FullExcel")
     def set_sheet_visiable(self, name, status):
         """
         设置sheet表的访问状态
@@ -101,7 +95,6 @@ class FullExcel(object):
         self.excel.DisplayAlerts = True
         return True
 
-    @check_func(__file__, "FullExcel")
     def change_alert(self, status):
         """
         修改当前的文件的告警设置
@@ -110,7 +103,6 @@ class FullExcel(object):
         """
         self.excel.DisplayAlerts = status
 
-    @check_func(__file__, "FullExcel")
     def close(self):
         """
         保存后关闭excel对象，并回收内存
@@ -128,7 +120,6 @@ class FullExcel(object):
         del self.excel
         return True
 
-    @check_func(__file__, "FullExcel")
     def transfer_col_text(self, col_num):
         """
         将col的index值转换为表达值，例如第一列为A,第二列为B，仅支持两个字母的转换
@@ -146,7 +137,6 @@ class FullExcel(object):
             str1 = str(i) + "" + str(j)
         return str1
 
-    @check_func(__file__, "FullExcel")
     def get_cell(self, sheet, row, col):
         """
         Get value of one cell
@@ -158,7 +148,6 @@ class FullExcel(object):
         sht = self.book.Worksheets(sheet)
         return sht.Cells(row, col).Value
 
-    @check_func(__file__, "FullExcel")
     def set_cell(self, sheet, row, col, value):
         """
         设置某个单元格的值
@@ -171,7 +160,6 @@ class FullExcel(object):
         sht = self.book.Worksheets(sheet)
         sht.Cells(row, col).Value = value
 
-    @check_func(__file__, "FullExcel")
     def get_comment(self, sheet, row, col):
         """
         获得某一个单元格的注解
@@ -185,7 +173,6 @@ class FullExcel(object):
         sht.Range(cell_text).Comment.Visible = True
         return sht.Range(cell_text).Comment.Text()
 
-    @check_func(__file__, "FullExcel")
     def get_sheets_size(self):
         """
         获得sheet数量
@@ -193,7 +180,6 @@ class FullExcel(object):
         """
         return self.book.Worksheets.count
 
-    @check_func(__file__, "FullExcel")
     def get_row_size(self, sheet, id):
         """
         获得某一行的数据最高值
@@ -206,7 +192,6 @@ class FullExcel(object):
         col = str(char) + "65535"
         return sht.Range(col).End(-4162).Row
 
-    @check_func(__file__, "FullExcel")
     def get_col_size(self, sheet, id):
         """
         获得某一列的数据最高值
@@ -217,7 +202,6 @@ class FullExcel(object):
         sht = self.book.Worksheets(sheet)
         return sht.Range(col_text).End(-4159).Column
 
-    @check_func(__file__, "FullExcel")
     def set_comment(self, sheet, row, col, data):
         """
         设置某个单元格的注释
@@ -230,7 +214,6 @@ class FullExcel(object):
         sht = self.book.Worksheets(sheet)
         sht.Cells(row, col).AddComment(data)
 
-    @check_func(__file__, "FullExcel")
     def get_range(self, sheet, top_row, lef_col, buttom_row, right_col):
         """
         获得某个区域的数值
@@ -246,7 +229,6 @@ class FullExcel(object):
         sht = self.book.Worksheets(sheet)
         return sht.Range(sht.Cells(top_row, lef_col), sht.Cells(buttom_row, right_col)).Value
 
-    @check_func(__file__, "FullExcel")
     def set_range(self, sheet, top_row, lef_col, buttom_row, right_col, data_list):
         """
         设置某个区域的数值
@@ -265,7 +247,6 @@ class FullExcel(object):
         sht.Range(sht.Cells(top_row, lef_col), sht.Cells(buttom_row, right_col)).Value = data_list
         return True
 
-    @check_func(__file__, "FullExcel")
     def merge_cell(self, sheet, top_row, lef_col, buttom_row, right_col, data):
         """
         合并指定区域的单元格，并设置值
@@ -285,7 +266,6 @@ class FullExcel(object):
         self.set_cell(sheet, top_row, lef_col, data)
         return True
 
-    @check_func(__file__, "FullExcel")
     def get_sheet_by_name(self, name):
         """
         根据名字准确查找某个sheet
@@ -297,7 +277,6 @@ class FullExcel(object):
                 return i
         return 0
 
-    @check_func(__file__, "FullExcel")
     def get_sheet_like_name(self, name):
         """
         根据名字模糊查找某个sheet
@@ -309,7 +288,6 @@ class FullExcel(object):
                 return i
         return 0
 
-    @check_func(__file__, "FullExcel")
     def copy_range(self, from_sheet, from_x1, from_y1, from_x2, from_y2):
         """
         拷贝sheet的某一个区域，与paste_range共用
@@ -324,7 +302,6 @@ class FullExcel(object):
         sht.Range(sht.Cells(from_x1, from_y1), sht.Cells(from_x2, from_y2)).Select()
         self.excel.Selection.Copy()
 
-    @check_func(__file__, "FullExcel")
     def paste_range(self, to_sheet, to_x1, to_y1, to_x2, to_y2):
         """
         黏贴sheet的某一个区域，与copy_range共用
@@ -339,7 +316,6 @@ class FullExcel(object):
         sht.Range(sht.Cells(to_x1, to_y1), sht.Cells(to_x2, to_y2)).Select()
         self.excel.Selection.PasteSpecial(Paste=-4104)
 
-    @check_func(__file__, "FullExcel")
     def set_border(self, sheet, top_row, lef_col, buttom_row, right_col):
         """
         设置目标sheet的某一个区域的边框
@@ -358,11 +334,9 @@ class FullExcel(object):
         return True
 
 
-# noinspection PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences
 class FastExcel(object):
     __class_name = "FastExcel"
 
-    @check_func(__file__, __class_name)
     def __init__(self, file_name, mode, sheet_name):
         self.file_name = file_name
         self.mode = mode
@@ -380,7 +354,6 @@ class FastExcel(object):
         else:
             pass
 
-    @check_func(__file__, __class_name)
     def close(self):
         """
         在write模式下保存文件
@@ -390,7 +363,6 @@ class FastExcel(object):
             if self.excel_book:
                 self.excel_book.save(self.file_name)
 
-    @check_func(__file__, __class_name)
     def get_sheets_name(self):
         """
         获得所有sheet名字
@@ -400,7 +372,6 @@ class FastExcel(object):
             raise Exception("Input mode should be read, get: %s" % self.mode)
         return self.excel_book.sheet_names()
 
-    @check_func(__file__, __class_name)
     def get_sheets_size(self):
         """
         获得sheet表的数量
@@ -410,7 +381,6 @@ class FastExcel(object):
             raise Exception("Input mode should be read, get: %s" % self.mode)
         return self.excel_book.nsheets
 
-    @check_func(__file__, __class_name)
     def get_sheet_by_id(self, index):
         """
         根据index值获得某个sheet
@@ -421,7 +391,6 @@ class FastExcel(object):
             raise Exception("Input mode should be read, get: %s" % self.mode)
         return self.excel_book.sheet_by_index(index - 1)
 
-    @check_func(__file__, __class_name)
     def get_sheet_by_name(self, name):
         """
         根据名字获得某个sheet
@@ -430,7 +399,6 @@ class FastExcel(object):
         """
         return self.excel_book.sheet_by_name(name)
 
-    @check_func(__file__, __class_name)
     def get_row_size(self, sheet):
         """
         获得一行最高值
@@ -442,7 +410,6 @@ class FastExcel(object):
         sht = self.get_sheet_by_id(sheet)
         return sht.nrows
 
-    @check_func(__file__, __class_name)
     def get_col_size(self, sheet):
         """
         获得一列最高值
@@ -454,7 +421,6 @@ class FastExcel(object):
         sht = self.get_sheet_by_id(sheet)
         return sht.ncols
 
-    @check_func(__file__, __class_name)
     def get_one_row(self, sheet, index):
         """
         获得一行单元格
@@ -467,7 +433,6 @@ class FastExcel(object):
         sht = self.get_sheet_by_id(sheet)
         return sht.row_values(index - 1)
 
-    @check_func(__file__, __class_name)
     def get_one_col(self, sheet, index):
         """
         获得一列单元格
@@ -480,7 +445,6 @@ class FastExcel(object):
         sht = self.get_sheet_by_id(sheet)
         return sht.col_values(index - 1)
 
-    @check_func(__file__, __class_name)
     def get_one_cell(self, sheet, r_cnt, c_cnt):
         """
         获得某个单元格
@@ -494,7 +458,6 @@ class FastExcel(object):
         sht = self.get_sheet_by_id(sheet)
         return sht.cell(r_cnt - 1, c_cnt - 1)
 
-    @check_func(__file__, __class_name)
     def get_cell(self, sheet, r_cnt, c_cnt):
         """
         获得单元格的值
@@ -508,7 +471,6 @@ class FastExcel(object):
         sht = self.get_sheet_by_id(sheet)
         return sht.cell_value(r_cnt - 1, c_cnt - 1)
 
-    @check_func(__file__, __class_name)
     def set_cell(self, row, col, data, style=None):
         """
         设置单元格的值
@@ -526,7 +488,6 @@ class FastExcel(object):
             self.editing_sheet.write(row - 1, col - 1, data)
         return True
 
-    @check_func(__file__, __class_name)
     def merge_cell(self, top_row, lef_col, buttom_row, right_col, data, style=None):
         """
         合并单元格，并设置值，可以通过create_style返回style进行格式调整
@@ -547,7 +508,6 @@ class FastExcel(object):
             self.set_cell(top_row, lef_col, data)
         return True
 
-    @check_func(__file__, __class_name)
     def create_style(self, desc):
         """
         create simple style use text, i.e.:
@@ -561,40 +521,3 @@ class FastExcel(object):
             raise Exception("Input mode should be write, get: %s" % self.mode)
         style = xlwt.easyxf(desc)
         return style
-
-
-# noinspection PyUnresolvedReferences
-def main():
-    import const
-    # with ExcelWrapper(const.project_main_path+r"\res\datas\input.xlsx", 'read') as excel_helper:
-    # print excel_helper.get_sheets_size()
-    # print excel_helper.get_cell(1, 1, 1)
-    # print excel_helper.get_col_size(1),"col"
-    # print excel_helper.get_row_size(1,1),"row"
-    # print excel_helper.get_range(1,1,1,2,3)
-    # print excel_helper.set_range(1,4,4,4,5,[["a","b"]])
-    # print excel_helper.set_range(1,5,1,6,3,[["a","b","e"],["c","d","f"]])
-    # print excel_helper.merge_cell(1,7,1,8,2,"aa")
-
-    with ExcelWrapper(const.project_main_path + r"\res\datas\input2.xlsx", "write", "sheet1") as excel_helper:
-        print excel_helper.set_range(1, 4, 4, 4, 5, [["a", "b"]])
-        print excel_helper.merge_cell(1, 7, 1, 8, 2, "aa")
-
-        # with ExcelWrapper(const.project_main_path+r"\res\datas\input.xlsx", 'read',use_fast=True) as excel_helper:
-        #     pass
-        #     print excel_helper.get_sheets_size()
-        #     print excel_helper.get_sheets_name()
-        #     print excel_helper.get_col_size(1),"col"
-        #     print excel_helper.get_row_size(1),"row"
-        #     print excel_helper.get_one_col(1,1)
-        #     print excel_helper.get_one_row(1,1)
-        #     print excel_helper.get_one_cell(1,1,1)
-        #     print excel_helper.get_cell(1,1,1)
-
-        # with ExcelWrapper(const.project_main_path + r"\res\datas\input1.xls", 'write', sheet_name="1",
-        #                   use_fast=True) as excel_helper:
-        #     print excel_helper.merge_cell(9, 1, 10, 2, "aa")
-
-
-if __name__ == "__main__":
-    main()

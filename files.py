@@ -19,6 +19,8 @@ def cmd_open(filename):
     :param filename:
     :return:true if the command is successfully done; false if it failed.
     """
+    if platform.system().find("indows") == -1:
+        raise Exception("BOOM! cmd_open only matches Windows platform.")
     if has_file(filename):
         command = "start " + filename
         os.system(command)
@@ -132,13 +134,6 @@ def write_datalists(file_name, data, flag=None, use_line_break=False):
 
 def main():
     print("hello,world")
-    # cmd_open("d:/py2.txt")
-    # print get_curr_dir()
-    # print get_curr_files()
-    # data_list = ["1", "2"]
-    # print write_datalists("d:/test.txt", data_list, use_line_break=True)
-    # print read_datalines("d:/test.txt", delete_line_break=True)
-    print(delete_file("d:/test.txt"))
 
 
 if __name__ == "__main__":

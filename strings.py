@@ -35,22 +35,3 @@ def transfer_sql_list(text_list):
     text_list = [transfer_sql_text(text) for text in text_list]
     return ",".join(text_list)
 
-def unicode(str1):
-    if isinstance(str1,str):
-        return str1.decode("utf-8")
-    return str1
-
-def utf8(str1):
-    if not isinstance(str1,str) and isinstance(str1,str):
-        return str1.encode("utf-8")
-    return str1
-
-def main():
-    str1 = u"一"
-    # print str1.isupper()
-    # print is_chinese(str1)
-    # print cns2digs(str1)
-    # print get_email_content(u"中文中文bbbb.aaa@163.com中文hekejun@unionpay.com")
-
-if __name__ == "__main__":
-    main()
