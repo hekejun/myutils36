@@ -97,7 +97,7 @@ def test_logs():
     log_info("info")
     log_warnning("warnning")
     log_error("error")
-    log_critical("critical")
+    # log_critical("critical")
 
 
 @wrapper
@@ -157,47 +157,47 @@ def test_redis():
 @wrapper
 def test_strings():
     str_list = [str(x) for x in range(10)]
-    print str_list
+    print(str_list)
     print(transfer_sql_list(str_list))
 
 
 @wrapper
 def test_files():
-    print get_curr_dir()
-    print get_curr_files()
+    print(get_curr_dir())
+    print(get_curr_files())
     data_list = ["1", "2"]
-    print write_datalists("d:/test.txt", data_list, use_line_break=True)
+    print(write_datalists("d:/test.txt", data_list, use_line_break=True))
     cmd_open("d:/test.txt")
-    print read_datalines("d:/test.txt", delete_line_break=True)
+    print(read_datalines("d:/test.txt", delete_line_break=True))
     print(delete_file("d:/test.txt"))
 
 
 @wrapper
 def test_excel():
-    # with ExcelWrapper(get_curr_dir()+r"/input.xlsx", 'read') as excel_helper:
-    #     print excel_helper.get_sheets_size()
-    #     print excel_helper.get_cell(1, 1, 1)
-    #     print excel_helper.get_col_size(1,1), "col"
-    #     print excel_helper.get_row_size(1, 1), "row"
-    #     print excel_helper.get_range(1, 1, 1, 2, 3)
-    #     print excel_helper.set_range(1, 4, 4, 4, 5, [["a", "b"]])
-    #     print excel_helper.set_range(1, 5, 1, 6, 3, [["a", "b", "e"], ["c", "d", "f"]])
-    #     print excel_helper.merge_cell(1, 7, 1, 8, 2, "aa")
-    #     print excel_helper.set_range(1, 4, 4, 4, 5, [["a", "b"]])
-    #     print excel_helper.merge_cell(1, 7, 1, 8, 2, "aa")
+    with ExcelWrapper(get_curr_dir()+r"/input.xlsx", 'read') as excel_helper:
+        print(excel_helper.get_sheets_size())
+        print(excel_helper.get_cell(1, 1, 1))
+        print(excel_helper.get_col_size(1,1)), "col"
+        print(excel_helper.get_row_size(1, 1)), "row"
+        print(excel_helper.get_range(1, 1, 1, 2, 3))
+        print(excel_helper.set_range(1, 4, 4, 4, 5, [["a", "b"]]))
+        print(excel_helper.set_range(1, 5, 1, 6, 3, [["a", "b", "e"], ["c", "d", "f"]]))
+        print(excel_helper.merge_cell(1, 7, 1, 8, 2, "aa"))
+        print(excel_helper.set_range(1, 4, 4, 4, 5, [["a", "b"]]))
+        print(excel_helper.merge_cell(1, 7, 1, 8, 2, "aa"))
 
     with ExcelWrapper(get_curr_dir() + r"/input.xlsx", 'read', use_fast=True) as excel_helper:
-        print excel_helper.get_sheets_size()
-        print excel_helper.get_sheets_name()
-        print excel_helper.get_col_size(2), "col"
-        print excel_helper.get_row_size(2), "row"
-        print excel_helper.get_one_col(2, 1)
-        print excel_helper.get_one_row(2, 1)
-        print excel_helper.get_one_cell(2, 1, 1)
-        print excel_helper.get_cell(2, 1, 1)
+        print(excel_helper.get_sheets_size())
+        print(excel_helper.get_sheets_name())
+        print(excel_helper.get_col_size(2)), "col"
+        print(excel_helper.get_row_size(2)), "row"
+        print(excel_helper.get_one_col(2, 1))
+        print(excel_helper.get_one_row(2, 1))
+        print(excel_helper.get_one_cell(2, 1, 1))
+        print(excel_helper.get_cell(2, 1, 1))
     with ExcelWrapper(get_curr_dir() + r"/input.xlsx", 'write', sheet_name="1",
                       use_fast=True) as excel_helper:
-        print excel_helper.merge_cell(2, 9, 1, 10, 2, "aa")
+        print(excel_helper.merge_cell(2, 9, 1, 10, 2, "aa"))
 
 
 @wrapper
@@ -212,18 +212,18 @@ def test_segement():
         """
     str_list = [str1, str2, str3]
     for temp_str in str_list:
-        print temp_str
+        print(temp_str)
         seg_list = min_cut(temp_str)
         print("MIN Mode: " + "/ ".join(seg_list))
         seg_list = jieba.lcut_for_search(temp_str)
         print("Search Mode: " + "/ ".join(seg_list))
-        print "-"*30
+        print("-"*30)
     str4 = u"在本地使用 27017 启动你的mongod服务。打开命令提示符窗口，进入MongoDB安装目录的bin目录输入命令mongodump？"
     for (w, flag) in min_cut_flag(str4):
-        print w, flag
-    print "-"*50
+        print(w, flag)
+    print("-"*50)
     for (w,flag) in max_cut_flag(str1):
-        print w,flag
+        print(w,flag)
 
 @wrapper
 def test_singleton():
@@ -245,11 +245,11 @@ if __name__ == '__main__':
     # test_datetimes()
     # test_dbc()
     # test_logs()
-    # test_emails()
+    test_emails()
     # test_mongo()
     # test_redis()
     # test_strings()
     # test_files()
     # test_excel()
     # test_segement()
-    test_singleton()
+    # test_singleton()

@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from email.header import Header
 import configs
+import const,const_values
 
 
 # code here
@@ -43,13 +44,12 @@ class Email(object):
         if isHtml:
             type = "html"
         if not file_dict:
-            msg = MIMEText(content, _subtype=type, _charset="utf8")
+            msg = MIMEText(content, _subtype=type, _charset="utf-8")
         else:
             msg = MIMEMultipart()
         msg["Accept-Language"] = "zh-CN"
         msg["Accept-Charset"] = "ISO-8859-1,utf-8"
-        # if not isinstance(subject, unicode):
-        #     subject = unicode(subject)
+        subject=subject.decode("utf-8")
         msg['Subject'] = subject
         msg['From'] = self.paras["user"] + "@" + self.paras["host"]
         msg['To'] = ";".join(to_list)
@@ -58,7 +58,7 @@ class Email(object):
             msg.attach(body)
             coding = "gb2312"
             for (k, v) in file_dict.items():
-                attach = MIMEText(open(v.decode("utf-8").encode("gb2312"), 'rb').read(), 'base64', coding)
+                attach = MIMEText(open(v.decode("utf-8").encode(coding), 'rb').read(), 'base64', coding)
                 attach["Content-Type"] = 'application/octet-stream'
                 attach["Content-Disposition"] = 'attachment; filename=' + k.decode("utf-8").encode(coding)
                 msg.attach(attach)
