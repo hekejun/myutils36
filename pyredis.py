@@ -44,10 +44,19 @@ class RedisHelper(object):
 
     def close(self):
         """
-        关闭，其实没有什么效果，redis本身支持线程池调度，连接的启动关闭有线程池管理，python接口无需关心。
+        关闭，除了清除对象内存外没有什么效果，redis本身支持线程池调度，连接的启动关闭有线程池管理，python接口无需关心。
         The connection_pool object has a disconnect method to force
         an immediate disconnect of all connections in the pool if necessary
         :return:
         """
         del self.__cursor  # 删除引用，等待垃圾回收
+
+    def set(self,*args):
+        return self.__cursor.set(*args)
+
+    def get(self,*args):
+        return self.__cursor.get(*args)
+
+    def lpush(self,*args):
+        return self.__cursor.lpush(*args)
 

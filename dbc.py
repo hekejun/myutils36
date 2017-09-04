@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 """
-mysql的读取接口，注意使用SQLWrapper来操作
+mysql的读取接口，注意使用SQLWrapper来操作。
+包括了SQL注入的防御措施。
 """
 from __future__ import division
 
@@ -31,8 +32,8 @@ class SqlWrapper(object):
 
 
 class Sql(object):
-    __slots__ = [ '__is_login', '__filepath', '__filename', '__database', "__is_normal"]
-    __connect0 = ""
+    __slots__ = ['__is_login', '__filepath', '__filename', '__database', "__is_normal"]
+    _connect0 = ""
 
     def __init__(self, **kwargs):
         """
@@ -53,38 +54,35 @@ class Sql(object):
         if not {"host", "user", "password", "server"}.issubset(set(para_key)):
             raise Exception("Need [host, user, password, server], found: %s" % str(para_key))
 
-        self.__connect0 = mysql.connect(host=para_dict.get("host"), user=para_dict.get("user"),
-                                        passwd=para_dict.get("password"), db=para_dict.get("server"), charset='utf8')
-        __cursor0 = self.__connect0.cursor()
-        __cursor0.execute("SET NAMES utf8")
-        self.__connect0.commit()
+        self._connect0 = mysql.connect(host=para_dict.get("host"), user=para_dict.get("user"),
+                                       passwd=para_dict.get("password"), db=para_dict.get("server"), charset='utf8')
+        __cursor0 = self._connect0.cursor()
+        __cursor0.run("SET NAMES utf8")
+        self._connect0.commit()
 
     def close(self):
         """
         close mysql connect
         :return:
         """
-        if self.__connect0:
-            self.__connect0.close()
+        if self._connect0:
+            self._connect0.close()
 
-    def execute_sql(self, sql, data=None):
+    def run(self, sql, data):
         """
         execute mysql statement with not result return
         :param sql:
         :param data:
         :return:
         """
-        cur = self.__connect0.cursor()
+        cur = self._connect0.cursor()
         if cur:
-            if not data:
-                cur.execute(sql)
-            else:
-                cur.executemany(sql, data)
-            self.__connect0.commit()
+            cur.executemany(sql, data)
+            self._connect0.commit()
             return True
         return False
 
-    def fetch_sql(self, sql, mode=None, size=-1):
+    def fetch(self, sql, data, mode=None, size=-1):
         """
         execute sql statement and fetch some results back
         :param sql:
@@ -92,9 +90,9 @@ class Sql(object):
         :param size:
         :return:
         """
-        cur = self.__connect0.cursor()
+        cur = self._connect0.cursor()
         if cur:
-            cur.execute(sql)
+            cur.run(sql, data)
             if mode == "_MANY" and len > 0:
                 data_list = cur.fetchmany(size=size)
             elif mode == "_ONE" and len == -1:
@@ -122,23 +120,26 @@ class SqlHelper(Sql):
             raise Exception(u"Size not match:col_list {0} ,data_list {1}".format(len(col_list), len(data_list[0])))
         data_list = [tuple(data) for data in data_list]
         sql = "insert into " + table + "(" + ",".join(col_list) + ") values(" + ",".join(["%s"] * len(col_list)) + ")"
-        log_info("SqlHelper run insert statement: {0},{1}".format(sql, ",".join(data_list[0])))
-        return super(SqlHelper, self).execute_sql(sql, data_list)
+        log_info("Sql: {0}, input: {1}".format(sql, data_list))
+        return super(SqlHelper, self).run(sql, data_list)
 
-    def delete(self, table, where=None):
+    def delete(self, table, where=None, data=()):
         """
         execute the delete sql on the data table
         :param table: the target data table
         :param where: the condition sql part if needed
+        :param data: the input data for filter sql
         :return: True if the sql execute successfully or False
         """
         sql = "delete from " + table
         if where:
+            if not data or not isinstance(data, tuple):
+                raise Exception("Need data with tuple format for delete sql execute.")
             sql += " where " + where
-        log_info("SqlHelper run delete statement: {}".format(sql))
-        return super(SqlHelper, self).execute_sql(sql)
+        log_info("Sql: {0}, input: {1}".format(sql, data))
+        return super(SqlHelper, self).run(sql, data)
 
-    def update_one(self, table, col, value, where=None):
+    def update(self, table, col, value, where=None):
         """
         update the data table with given value on a col
         :param table: the data table
@@ -147,12 +148,12 @@ class SqlHelper(Sql):
         :param where: the condition sql part
         :return:True if the sql execute successfully or False
         """
-        my_value = strings.transfer_sql_text(value)
-        sql = "update " + table + " set " + col + " = " + my_value + ""
+        sql = "update " + table + " set " + col + " = %s"
+        data = tuple(value)
         if where:
             sql += " where " + where
-        log_info("SqlHelper run update statement: {}".format(sql))
-        return super(SqlHelper, self).execute_sql(sql)
+        log_info("Sql: {0}, input: {1}".format(sql, data))
+        return super(SqlHelper, self).run(sql, data)
 
     def update_many(self, table, col_list, data_list, where=None):
         """
@@ -165,22 +166,24 @@ class SqlHelper(Sql):
         """
         sql = "update " + table + " set "
         if len(col_list) != len(data_list):
-            raise Exception(u"Size not match: col_list size--%d ,data_list size--%d" %len(col_list), len(data_list))
+            raise Exception(u"Size not match: col_list size--%d ,data_list size--%d" % len(col_list), len(data_list))
+        new_datas = tuple(data_list)
         pairs = []
-        for i in range(0, len(col_list)):
-            pairs.append(col_list[i] + " = " + strings.transfer_sql_text(data_list[i]))
+        for col in col_list:
+            pairs.append("{0} = %s".format(col))
         sql += " , ".join(pairs)
         if where:
             sql += " where " + where
-        log_info("SqlHelper run update_many statement: {}".format(sql))
-        return super(SqlHelper, self).execute_sql(sql)
+        log_info("Sql: {0}, input: {1}".format(sql, new_datas))
+        return super(SqlHelper, self).run(sql, new_datas)
 
-    def select_many(self, table, col=None, where=None, order_by=None, group_by=None):
+    def select_many(self, table, col=None, where=None, data=(), order_by=None, group_by=None):
         """
         select some values from table
         :param table: data table
         :param col: columns in data table, if not col, use * instead
         :param where:
+        :param data:
         :param order_by:
         :param group_by:
         :return:
@@ -190,16 +193,18 @@ class SqlHelper(Sql):
         else:
             sql = "select * from " + table
         if where:
+            if not data or not isinstance(data, tuple):
+                raise Exception("Need data with tuple format for select sql execute.")
             sql += " where " + where
         if group_by:
             sql += " group by " + group_by
         if order_by:
             sql += " order by " + order_by
-        log_info("SqlHelper run select statement:{}".format(sql))
-        result = super(SqlHelper, self).fetch_sql(sql)
+        log_info("Sql: {0}, input: {1}".format(sql, data))
+        result = super(SqlHelper, self).fetch(sql, data)
         return [list(x) for x in result]
 
-    def select_one(self, table, col=None, where=None, order_by=None, group_by=None):
+    def filter(self, table, col=None, where=None, order_by=None, group_by=None):
         if not col or (col.upper().find("CONCAT") == -1 and col.find(",") > -1):
             raise Exception("Input Column name INVALID: %s!" % col)
         temp = self.select_many(table=table, col=col, where=where, order_by=order_by, group_by=group_by)

@@ -188,7 +188,7 @@ class MongoHelper(object):
             operator = "$set"
         new_dict = {operator: value}
         if only_one:
-            return self.__db.get_collection(collection_name).update_one(where, new_dict, upsert=upsert)
+            return self.__db.get_collection(collection_name).update(where, new_dict, upsert=upsert)
         else:
             return self.__db.get_collection(collection_name).update_many(where, new_dict, upsert=upsert)
 
@@ -209,7 +209,7 @@ class MongoHelper(object):
             new_dict = {"$addToSet": value}
         else:
             new_dict = {"$push": value}
-        self.__db.get_collection(collection_name).update_one(where,new_dict,upsert=True)
+        self.__db.get_collection(collection_name).update(where, new_dict, upsert=True)
 
     def pull(self,collection_name,where,value):
         """
@@ -225,7 +225,7 @@ class MongoHelper(object):
         if not isinstance(value, dict):
             raise Exception("Input parameter value should be dict type, get %s <%s> " % (str(value), str(type(value))))
         new_dict = {"$pop": value}
-        self.__db.get_collection(collection_name).update_one(where,new_dict,upsert=True)
+        self.__db.get_collection(collection_name).update(where, new_dict, upsert=True)
 
     def replace_document(self, collection_name, document, where, upsert=True):
         if not isinstance(where, dict):

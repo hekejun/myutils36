@@ -236,6 +236,11 @@ def test_singleton():
     assert j is c
     assert h is d
 
+@wrapper
+def test():
+    data=[(0,1,"222"),(0.1,datetime.datetime.now())]
+    print("{0},{1}".format("1",data))
+
 if __name__ == '__main__':
     print("=======================")
     print("Python version:{0}.{1}.{2}".format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro))
@@ -245,7 +250,7 @@ if __name__ == '__main__':
     # test_datetimes()
     # test_dbc()
     # test_logs()
-    test_emails()
+    # test_emails()
     # test_mongo()
     # test_redis()
     # test_strings()
@@ -253,3 +258,4 @@ if __name__ == '__main__':
     # test_excel()
     # test_segement()
     # test_singleton()
+    test()
