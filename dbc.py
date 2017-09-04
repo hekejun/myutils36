@@ -7,7 +7,6 @@ from __future__ import division
 
 import MySQLdb as mysql
 import configs
-import strings
 from logs import log_info
 
 __all__ = ["SqlWrapper"]
