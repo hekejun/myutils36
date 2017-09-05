@@ -7,3 +7,9 @@
 2017-09-01 Friday 11:34:02 __init__.py-line:131 [DEBUG] : Loading model from cache c:\users\kejun.he\appdata\local\temp\jieba.cache
 2017-09-01 Friday 11:34:02 __init__.py-line:163 [DEBUG] : Loading model cost 0.391 seconds.
 2017-09-01 Friday 11:34:02 __init__.py-line:164 [DEBUG] : Prefix dict has been built succesfully.
+2017-09-05 Tuesday 16:51:31 logs.py-line:46 [INFO] : Function <run_1> costs time: 3000 ms
+2017-09-05 Tuesday 16:52:04 logs.py-line:46 [INFO] : Function <run_1> costs time: 3000 ms
+2017-09-05 Tuesday 17:55:12 logs.py-line:35 [DEBUG] : debug
+2017-09-05 Tuesday 17:55:12 logs.py-line:46 [INFO] : info
+2017-09-05 Tuesday 17:55:12 logs.py-line:57 [WARNING] : warnning
+2017-09-05 Tuesday 17:55:12 logs.py-line:68 [ERROR] : error

@@ -11,6 +11,7 @@ import sys
 import traceback
 from datetime import datetime
 import logs
+from functools import wraps
 
 # code here
 __all__ = ["check_func", "cal_run_time"]
@@ -22,7 +23,7 @@ def cal_run_time(func):
     :param func:装饰函数名
     :return:返回函数运行结果
     """
-
+    @wraps(func)
     def _cal(*args, **kwargs):
         time3 = datetime.utcnow()
         result = func(*args, **kwargs)
@@ -45,8 +46,8 @@ def check_func(file_name=None):
         方法检查的装饰器
         获得
     """
-
     def _check(func):
+        @wraps(func)
         def __check(*args, **kwargs):
             try:
                 return func(*args, **kwargs)

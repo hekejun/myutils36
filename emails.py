@@ -11,7 +11,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from email.header import Header
 import configs
-import const,const_values
 
 
 # code here

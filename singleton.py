@@ -8,7 +8,6 @@ from __future__ import division
 
 import threading
 
-import const, const_values
 from dbc import SqlHelper
 from mongo import MongoHelper
 from pyredis import RedisHelper

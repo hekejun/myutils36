@@ -39,12 +39,17 @@ def wrapper(func):
 
 @wrapper
 def test_check():
-    run_1()
-    run_2()
+    a=cal_run_time(run_1)
+    print a.__name__
+    # run_2()
 
 
 @cal_run_time
 def run_1():
+    """
+    test string
+    :return:
+    """
     for x in range(0, 3):
         time.sleep(1)
 
@@ -236,20 +241,30 @@ def test_singleton():
     assert j is c
     assert h is d
 
+c=1
+
 @wrapper
-def test():
-    data=[(0,1,"222"),(0.1,datetime.datetime.now())]
-    print("{0},{1}".format("1",data))
+def test(b=2):
+    global result
+    result=1
+    return result
+
+
+def test_var_args(*args, **kwargs):
+    print("args:{0}, kwargs:{1}".format(args,kwargs))
+
+
+
 
 if __name__ == '__main__':
-    print("=======================")
-    print("Python version:{0}.{1}.{2}".format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro))
-    print("System info:{0}, {1}".format(platform.system(), platform.architecture()[0]))
-    # test_check()
+    print("="*30)
+    print("Python version: {0}.{1}.{2}".format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro))
+    print("System info: {0}, {1}".format(platform.system(), platform.architecture()[0]))
+    test_check()
     # test_config()
-    # test_datetimes()
+    test_datetimes()
     # test_dbc()
-    # test_logs()
+    test_logs()
     # test_emails()
     # test_mongo()
     # test_redis()
@@ -258,4 +273,3 @@ if __name__ == '__main__':
     # test_excel()
     # test_segement()
     # test_singleton()
-    test()

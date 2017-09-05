@@ -5,7 +5,7 @@ File: logs.py
 """
 from __future__ import division
 import logging
-import const, const_values
+import const,const_values
 
 __all__ = ["log_debug", "log_info", "log_warnning", "log_error", "log_critical"]
 
@@ -13,7 +13,7 @@ __all__ = ["log_debug", "log_info", "log_warnning", "log_error", "log_critical"]
 logging.basicConfig(level=const.log_file_level,
                     format='%(asctime)s %(filename)s-line:%(lineno)d [%(levelname)s] : %(message)s',
                     datefmt='%Y-%m-%d %A %H:%M:%S',
-                    filename=const.log_file_name,
+                    filename=const.log_file_name ,
                     filemode='a')
 console = logging.StreamHandler()
 console.setLevel(const.log_console_level)

@@ -6,9 +6,8 @@ Author: Kejun.He
 """
 from __future__ import division, absolute_import
 
-import configs, const, const_values
+import configs
 import redis
-import types
 
 
 class RedisHelper(object):

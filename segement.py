@@ -6,7 +6,6 @@ Author: Kejun.He
 """
 from __future__ import division, absolute_import
 import jieba
-import const
 import jieba.posseg as pseg
 
 

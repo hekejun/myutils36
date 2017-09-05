@@ -106,7 +106,7 @@ class SqlHelper(Sql):
     def __init__(self, **kwargs):
         super(SqlHelper, self).__init__(**kwargs)
 
-    def insert(self, table, col_list, data_list):
+    def add(self, table, col_list, data_list):
         """
         insert data_list into data table
         :param table: data table
@@ -122,7 +122,7 @@ class SqlHelper(Sql):
         log_info("Sql: {0}, input: {1}".format(sql, data_list))
         return super(SqlHelper, self).run(sql, data_list)
 
-    def delete(self, table, where=None, data=()):
+    def remove(self, table, where=None, data=()):
         """
         execute the delete sql on the data table
         :param table: the target data table
@@ -176,7 +176,7 @@ class SqlHelper(Sql):
         log_info("Sql: {0}, input: {1}".format(sql, new_datas))
         return super(SqlHelper, self).run(sql, new_datas)
 
-    def select_many(self, table, col=None, where=None, data=(), order_by=None, group_by=None):
+    def filter(self, table, col=None, where=None, data=(), order_by=None, group_by=None):
         """
         select some values from table
         :param table: data table
@@ -203,9 +203,18 @@ class SqlHelper(Sql):
         result = super(SqlHelper, self).fetch(sql, data)
         return [list(x) for x in result]
 
-    def filter(self, table, col=None, where=None, order_by=None, group_by=None):
+    def filter_one(self, table, col=None, where=None, order_by=None, group_by=None):
+        """
+        filter data with only one column
+        :param table:
+        :param col:
+        :param where:
+        :param order_by:
+        :param group_by:
+        :return: data list
+        """
         if not col or (col.upper().find("CONCAT") == -1 and col.find(",") > -1):
             raise Exception("Input Column name INVALID: %s!" % col)
-        temp = self.select_many(table=table, col=col, where=where, order_by=order_by, group_by=group_by)
+        temp = self.filter(table=table, col=col, where=where, order_by=order_by, group_by=group_by)
         result = [x[0] for x in temp]
         return result

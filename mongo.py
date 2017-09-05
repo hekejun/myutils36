@@ -6,11 +6,9 @@ Author: Kejun.He
 """
 from __future__ import division, absolute_import
 
-import types
-
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
-import configs, const, const_values
+import configs
 
 
 # code here
@@ -87,7 +85,7 @@ class MongoHelper(object):
         if values and not isinstance(values, dict):
             raise Exception(
                 "Input parameter values should be dict type, get %s <%s> " % (str(values), str(type(values))))
-        return self.__db.get_collection(collection_name).insert(values,check_keys=False)
+        return self.__db.get_collection(collection_name).add(values, check_keys=False)
 
     def insert_one(self, collection_name, values):
         if values and not isinstance(values, dict):
