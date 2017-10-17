@@ -109,7 +109,7 @@ def test_logs():
 def test_yield():
     read_file=yield_datalines("run.log")
     for i in read_file:
-        print(i.strip("\n"))
+        print(i)
 
 
 @wrapper

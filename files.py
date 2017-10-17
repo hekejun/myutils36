@@ -106,7 +106,8 @@ def yield_datalines(file_name, flag=None, delete_line_break=False):
     with open(file_name, flag) as f:
         data=f.readline()
         while data:
-            yield data
+            line_break = "\n" if platform.system().find("indows") > -1 else "\r\n"
+            yield data.strip(line_break)
             data=f.readline()
 
 
