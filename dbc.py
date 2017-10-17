@@ -56,7 +56,7 @@ class Sql(object):
         self._connect0 = mysql.connect(host=para_dict.get("host"), user=para_dict.get("user"),
                                        passwd=para_dict.get("password"), db=para_dict.get("server"), charset='utf8')
         __cursor0 = self._connect0.cursor()
-        __cursor0.run("SET NAMES utf8")
+        __cursor0.execute("SET NAMES utf8")
         self._connect0.commit()
 
     def close(self):
@@ -91,7 +91,7 @@ class Sql(object):
         """
         cur = self._connect0.cursor()
         if cur:
-            cur.run(sql, data)
+            cur.execute(sql, data)
             if mode == "_MANY" and len > 0:
                 data_list = cur.fetchmany(size=size)
             elif mode == "_ONE" and len == -1:
@@ -132,8 +132,8 @@ class SqlHelper(Sql):
         """
         sql = "delete from " + table
         if where:
-            if not data or not isinstance(data, tuple):
-                raise Exception("Need data with tuple format for delete sql execute.")
+            if not data or not isinstance(data, (tuple,list)):
+                raise Exception("Need data with tuple/list format for delete sql execute.")
             sql += " where " + where
         log_info("Sql: {0}, input: {1}".format(sql, data))
         return super(SqlHelper, self).run(sql, data)
@@ -192,7 +192,7 @@ class SqlHelper(Sql):
         else:
             sql = "select * from " + table
         if where:
-            if not data or not isinstance(data, tuple):
+            if not data or not isinstance(data, (tuple,list)):
                 raise Exception("Need data with tuple format for select sql execute.")
             sql += " where " + where
         if group_by:

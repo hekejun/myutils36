@@ -13,3 +13,14 @@
 2017-09-05 Tuesday 17:55:12 logs.py-line:46 [INFO] : info
 2017-09-05 Tuesday 17:55:12 logs.py-line:57 [WARNING] : warnning
 2017-09-05 Tuesday 17:55:12 logs.py-line:68 [ERROR] : error
+2017-10-17 Tuesday 22:26:54 logs.py-line:46 [INFO] : Sql: insert into role(role_name,role_desc) values(%s,%s), input: [('我们', '不知道'), ('我们w2', '不知道q')]
+2017-10-17 Tuesday 22:28:06 logs.py-line:46 [INFO] : Sql: insert into role(role_name,role_desc) values(%s,%s), input: [('我们', '不知道'), ('我们w2', '不知道q')]
+2017-10-17 Tuesday 22:28:39 logs.py-line:46 [INFO] : Sql: insert into role(role_name,role_desc) values(%s,%s), input: [('我们', '不知道'), ('我们w2', '不知道q')]
+2017-10-17 Tuesday 22:31:08 logs.py-line:46 [INFO] : Sql: select * from ml, input: ()
+2017-10-17 Tuesday 22:31:58 logs.py-line:46 [INFO] : Sql: select * from role, input: ()
+2017-10-17 Tuesday 22:32:36 logs.py-line:46 [INFO] : Sql: select * from role, input: ()
+2017-10-17 Tuesday 22:32:43 logs.py-line:46 [INFO] : Sql: select * from ml, input: ()
+2017-10-17 Tuesday 22:32:45 logs.py-line:46 [INFO] : Sql: select * from ml, input: ()
+2017-10-17 Tuesday 22:32:45 logs.py-line:46 [INFO] : Sql: select * from ml, input: ()
+2017-10-17 Tuesday 22:32:45 logs.py-line:46 [INFO] : Sql: select * from ml, input: ()
+2017-10-17 Tuesday 22:32:53 logs.py-line:46 [INFO] : Sql: select * from ml, input: ()

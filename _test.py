@@ -82,18 +82,17 @@ def test_datetimes():
     print(date2str(str2date(dt_str)))
 
 
-@wrapper
 def test_dbc():
     # with SqlWrapper(filename="mysql.ini", section="database_mysql") as sql_helper: #另外一种导入方式
-    with SqlWrapper(host="127.0.0.1", server="test", user="test", password="test") as sql_helper:
-        sql_helper.insert(table="role", col_list=["role_name", "role_desc"],
-                          data_list=[[u"我们", u"不知道"], [u"我们w2", u"不知道q"]])
-        print(sql_helper.select_one(table="role", col="id", where="id>5", order_by="id desc"))
-        print(sql_helper.select_many(table="role", where="id>5", order_by="id desc"))
-        print(sql_helper.update_many(table="role", col_list=["role_name", "role_desc"], data_list=["1", "2"],
-                                     where="id>8"))
-        print(sql_helper.update_one(table="role", col="role_name", value="33", where="id>10"))
-        print(sql_helper.delete(table="role", where="id>=7"))
+    with SqlWrapper(host="127.0.0.1", server="test", user="root", password="kejun") as sql_helper:
+        # sql_helper.add(table="role", col_list=["role_name", "role_desc"],
+        #                   data_list=[[u"我们", u"不知道"], [u"我们w2", u"不知道q"]])
+        # print(sql_helper.filter_one(table="role", col="id", where="id>%s",data=[5], order_by="id desc"))
+        print(sql_helper.filter(table="role"))
+        # print(sql_helper.update_many(table="role", col_list=["role_name", "role_desc"], data_list=["1", "2"],
+        #                              where="id>8"))
+        # print(sql_helper.update(rtable="role", col="role_name", value="33", where="id>10"))
+        # print(sql_helper.remove(table="role", where="id>=7"))
 
 
 @wrapper
@@ -270,7 +269,7 @@ if __name__ == '__main__':
     # test_check()
     # test_config()
     # test_datetimes()
-    # test_dbc()
+    test_dbc()
     # test_logs()
     # test_emails()
     # test_mongo()
@@ -280,4 +279,4 @@ if __name__ == '__main__':
     # test_excel()
     # test_segement()
     # test_singleton()
-    test_yield()
+    # test_yield()
