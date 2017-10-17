@@ -40,7 +40,7 @@ def wrapper(func):
 @wrapper
 def test_check():
     a=cal_run_time(run_1)
-    print a.__name__
+    print(a.__name__)
     # run_2()
 
 

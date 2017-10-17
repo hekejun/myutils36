@@ -12,7 +12,6 @@ import types
 from check import check_func
 
 
-@check_func(__file__)
 def cmd_open(filename):
     """
     open the determined file through cmd command
@@ -29,7 +28,6 @@ def cmd_open(filename):
         return False
 
 
-@check_func(__file__)
 def has_file(filename):
     """
     check the file exisits
@@ -39,7 +37,6 @@ def has_file(filename):
     return os.path.exists(filename)
 
 
-@check_func(__file__)
 def get_dir_files(path):
     """
     get the files in the dir path
@@ -49,7 +46,6 @@ def get_dir_files(path):
     return os.listdir(path)
 
 
-@check_func(__file__)
 def get_curr_dir():
     """
     get the current dir of the working program
@@ -58,7 +54,6 @@ def get_curr_dir():
     return os.getcwd()
 
 
-@check_func(__file__)
 def get_curr_files(path=None):
     """
     get the given dir files, if parameter is none get the files in current working dir
@@ -69,7 +64,6 @@ def get_curr_files(path=None):
     return os.listdir(path)
 
 
-@check_func(__file__)
 def get_file_size(filename):
     """
     get the size of the input file
@@ -79,7 +73,6 @@ def get_file_size(filename):
     return os.path.getsize(filename)
 
 
-@check_func(__file__)
 def delete_file(filename):
     """
     delete the input file
@@ -92,7 +85,6 @@ def delete_file(filename):
     return False
 
 
-@check_func(__file__)
 def read_datalines(file_name, flag=None, delete_line_break=False):
     """
     read file into data lines
@@ -110,7 +102,6 @@ def read_datalines(file_name, flag=None, delete_line_break=False):
         return data
 
 
-@check_func(__file__)
 def write_datalists(file_name, data, flag=None, use_line_break=False):
     """
     write file with data lists. use line break depends on the system platform
