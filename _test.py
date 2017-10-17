@@ -106,6 +106,13 @@ def test_logs():
 
 
 @wrapper
+def test_yield():
+    read_file=yield_datalines("run.log")
+    for i in read_file:
+        print(i.strip("\n"))
+
+
+@wrapper
 def test_emails():
     EM = Email(filename="email.ini", section="UP-email")
     print(EM.send_email(['hekejun@unionpay.com'], "测试邮箱设置", "这是测试邮件"))
@@ -260,11 +267,11 @@ if __name__ == '__main__':
     print("="*30)
     print("Python version: {0}.{1}.{2}".format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro))
     print("System info: {0}, {1}".format(platform.system(), platform.architecture()[0]))
-    test_check()
+    # test_check()
     # test_config()
-    test_datetimes()
+    # test_datetimes()
     # test_dbc()
-    test_logs()
+    # test_logs()
     # test_emails()
     # test_mongo()
     # test_redis()
@@ -273,3 +280,4 @@ if __name__ == '__main__':
     # test_excel()
     # test_segement()
     # test_singleton()
+    test_yield()

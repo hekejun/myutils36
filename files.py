@@ -9,7 +9,6 @@ import os
 import platform
 import types
 
-from check import check_func
 
 
 def cmd_open(filename):
@@ -100,6 +99,15 @@ def read_datalines(file_name, flag=None, delete_line_break=False):
             line_break = "\n" if platform.system().find("indows") > -1 else "\r\n"
             data = [line.strip(line_break) for line in data]
         return data
+
+def yield_datalines(file_name, flag=None, delete_line_break=False):
+    if not flag:
+        flag = "r"
+    with open(file_name, flag) as f:
+        data=f.readline()
+        while data:
+            yield data
+            data=f.readline()
 
 
 def write_datalists(file_name, data, flag=None, use_line_break=False):
