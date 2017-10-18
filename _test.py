@@ -39,8 +39,7 @@ def wrapper(func):
 
 @wrapper
 def test_check():
-    a=cal_run_time(run_1)
-    print(a.__name__)
+    a = cal_run_time(run_1)
     # run_2()
 
 
@@ -82,17 +81,18 @@ def test_datetimes():
     print(date2str(str2date(dt_str)))
 
 
+@wrapper
 def test_dbc():
-    # with SqlWrapper(filename="mysql.ini", section="database_mysql") as sql_helper: #另外一种导入方式
-    with SqlWrapper(host="127.0.0.1", server="test", user="root", password="kejun") as sql_helper:
-        # sql_helper.add(table="role", col_list=["role_name", "role_desc"],
-        #                   data_list=[[u"我们", u"不知道"], [u"我们w2", u"不知道q"]])
-        # print(sql_helper.filter_one(table="role", col="id", where="id>%s",data=[5], order_by="id desc"))
-        print(sql_helper.filter(table="role"))
-        # print(sql_helper.update_many(table="role", col_list=["role_name", "role_desc"], data_list=["1", "2"],
-        #                              where="id>8"))
-        # print(sql_helper.update(rtable="role", col="role_name", value="33", where="id>10"))
-        # print(sql_helper.remove(table="role", where="id>=7"))
+    with SqlWrapper(filename="./data/home.ini", section="database_mysql") as sql_helper: #另外一种导入方式
+    # with SqlWrapper(host="192.168.2.24", server="petshop", user="upa", password="kejun",write_log=True) as sql_helper:
+        print(sql_helper.add(table="role", col_list=["role_name", "role_desc"],
+                          data_list=[[u"我们", u"不知道"], [u"我们w2", u"不知道q"], [u"我们3", u"不知道3"], [u"我们4", u"不知道4"]]))
+        print(sql_helper.filter_one(table="role", col="id", where="id>%s",data=[1],limit=1))
+        print(sql_helper.filter(table="role", col="id,role_name", where="id>%s",data=[1],limit=[2,4]))
+        print(sql_helper.filter(table="role", where="id>%s",data=[10], order_by="id desc"))
+        print(sql_helper.update(table="role",col="role_name",value="MARK",where="id>%s",data=[15]))
+        print(sql_helper.update_many(table="role", col_list=["role_name", "role_desc"], data_list=["1", "2"],where="id>%s",data=[20]))
+        print(sql_helper.remove(table="role", where="id>=%s",data=[23]))
 
 
 @wrapper
@@ -102,13 +102,6 @@ def test_logs():
     log_warnning("warnning")
     log_error("error")
     # log_critical("critical")
-
-
-@wrapper
-def test_yield():
-    read_file=yield_datalines("run.log")
-    for i in read_file:
-        print(i)
 
 
 @wrapper
@@ -185,10 +178,10 @@ def test_files():
 
 @wrapper
 def test_excel():
-    with ExcelWrapper(get_curr_dir()+r"/input.xlsx", 'read') as excel_helper:
+    with ExcelWrapper(get_curr_dir() + r"/input.xlsx", 'read') as excel_helper:
         print(excel_helper.get_sheets_size())
         print(excel_helper.get_cell(1, 1, 1))
-        print(excel_helper.get_col_size(1,1)), "col"
+        print(excel_helper.get_col_size(1, 1)), "col"
         print(excel_helper.get_row_size(1, 1)), "row"
         print(excel_helper.get_range(1, 1, 1, 2, 3))
         print(excel_helper.set_range(1, 4, 4, 4, 5, [["a", "b"]]))
@@ -228,42 +221,35 @@ def test_segement():
         print("MIN Mode: " + "/ ".join(seg_list))
         seg_list = jieba.lcut_for_search(temp_str)
         print("Search Mode: " + "/ ".join(seg_list))
-        print("-"*30)
+        print("-" * 30)
     str4 = u"在本地使用 27017 启动你的mongod服务。打开命令提示符窗口，进入MongoDB安装目录的bin目录输入命令mongodump？"
     for (w, flag) in min_cut_flag(str4):
         print(w, flag)
-    print("-"*50)
-    for (w,flag) in max_cut_flag(str1):
-        print(w,flag)
+    print("-" * 50)
+    for (w, flag) in max_cut_flag(str1):
+        print(w, flag)
+
 
 @wrapper
 def test_singleton():
-    c = Singleton().instance(instance="mysql",filename= "mysql.ini", section="mysql_server")
-    d = Singleton().instance(instance="mysql",filename= "mysql.ini", section="mysql_server")
-    j = Singleton().instance(instance="mysql",filename= "mysql.ini", section="mysql_server")
-    args_dict={"instance":"mysql","filename":"../res/profiles/mysql.ini","section":"mysql_server"}
-    h=Singleton().instance(**args_dict)
+    c = Singleton().instance(instance="mysql", filename="mysql.ini", section="mysql_server")
+    d = Singleton().instance(instance="mysql", filename="mysql.ini", section="mysql_server")
+    j = Singleton().instance(instance="mysql", filename="mysql.ini", section="mysql_server")
+    args_dict = {"instance": "mysql", "filename": "../res/profiles/mysql.ini", "section": "mysql_server"}
+    h = Singleton().instance(**args_dict)
     assert c is d
     assert j is c
     assert h is d
 
-c=1
 
-@wrapper
-def test(b=2):
-    global result
-    result=1
-    return result
-
-
-def test_var_args(*args, **kwargs):
-    print("args:{0}, kwargs:{1}".format(args,kwargs))
-
-
+@check_func(__file__)
+def test_1():
+    a = 3 / 0
+    print(a)
 
 
 if __name__ == '__main__':
-    print("="*30)
+    print("=" * 30)
     print("Python version: {0}.{1}.{2}".format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro))
     print("System info: {0}, {1}".format(platform.system(), platform.architecture()[0]))
     # test_check()
@@ -279,4 +265,4 @@ if __name__ == '__main__':
     # test_excel()
     # test_segement()
     # test_singleton()
-    # test_yield()
+
